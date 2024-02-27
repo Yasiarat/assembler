@@ -1,0 +1,89 @@
+; Ратова Ярослава   группа 105  задание 16
+extern io_get_udec, io_print_udec, io_newline
+section .bss
+    a11 resd 1; резервируем 4 байта
+    a12 resd 1; резервируем 4 байта
+    a21 resd 1; резервируем 4 байта
+    a22 resd 1; резервируем 4 байта
+    b1 resd 1; резервируем 4 байта
+    b2 resd 1; резервируем 4 байта
+    x resd 1; резервируем 4 байта
+section .text
+global main
+main:
+    mov ebp, esp; for correct debugging
+    call io_get_udec; читаем число 
+    mov dword[a11], eax; помещаем
+    
+    call io_get_udec; читаем число 
+    mov dword[a12], eax; помещаем
+    
+    call io_get_udec; читаем число 
+    mov dword[a21], eax; помещаем
+    
+    call io_get_udec; читаем число 
+    mov dword[a22], eax; помещаем
+    
+    call io_get_udec; читаем число 
+    mov dword[b1], eax; помещаем
+    
+    call io_get_udec; читаем число 
+    mov dword[b2], eax; помещаем
+    
+    mov ebx, dword[a11];
+    xor ebx, dword[a21];
+    xor ebx, dword[b1];
+    xor ebx, dword[b2];
+    
+    not ebx;
+    
+    and ebx, dword[a22];
+    and ebx, dword[a12];
+    
+    ; закончили первую часть вычислений
+    
+    mov ecx, dword[a12];
+    not ecx;
+    
+    and ecx, dword[a11];
+    and ecx, dword[b1];
+    
+    ; закончили вторую часть вычислений
+    
+    mov edx, dword[a22];
+    xor edx;
+    
+    and edx, dword[a12]
+    and edx, dword[b2]
+    
+    ; закончили третью часть вычислений
+    
+    or ebx, ecx;
+    or ebx, edx;
+    
+    mov eax, ebx;
+    mov dword[x], eax
+    call io_print_udec; вывод x
+    call io_newline; перевод строки
+    
+    mov ebx, dword[a21]
+    and ebx, dword[x];
+    xor ebx, dword[b2];
+    and ebx, dword[a22];
+    
+    ; закончили первую часть вычислений
+    
+    mov ecx, dword[a11];
+    and ecx, dword[x];
+    xor ecx, dword[b1];
+    and ecx, dword[a12];
+    
+    ; закончили вторую часть вычислений
+    
+    or ecx, ebx;
+    
+    mov eax, ecx
+    call io_print_udec; вывод y
+    call io_newline; перевод строки
+    xor eax, eax
+    ret
